@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Café — Każda filiżanka opowiada historię.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            espresso:  '#0f0805',
+            cream:     '#f2e9df',
+            caramel:   '#c8956c',
+            mist:      '#9e9089',
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans:  ['DM Sans', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #0f0805;
+      color: #f2e9df;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── CURSOR ── */
+    #c-dot {
+      width: 7px; height: 7px;
+      background: #c8956c;
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9999;
+      will-change: transform;
+    }
+    #c-ring {
+      width: 38px; height: 38px;
+      border: 1px solid rgba(200,149,108,.45);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9998;
+      transition: border-color .2s;
+      will-change: transform;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-track { background: #0f0805; }
+    ::-webkit-scrollbar-thumb { background: #c8956c; }
+
+    /* ── NAV ── */
+    #nav {
+      position: fixed; inset: 0 0 auto 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem 3rem;
+      transition: background .4s, backdrop-filter .4s;
+    }
+    #nav.stuck {
+      background: rgba(15,8,5,.88);
+      backdrop-filter: blur(14px);
+    }
+    .nav-link {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .65rem; letter-spacing: .28em;
+      text-transform: uppercase; color: #9e9089;
+      transition: color .25s;
+      text-decoration: none;
+    }
+    .nav-link:hover { color: #f2e9df; }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem; letter-spacing: .04em;
+      color: #f2e9df; text-decoration: none;
+    }
+    .nav-logo span { color: #c8956c; }
+
+    /* ── BUTTONS ── */
+    .btn-p {
+      display: inline-block;
+      background: #c8956c; color: #0f0805;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .65rem; font-weight: 500;
+      letter-spacing: .28em; text-transform: uppercase;
+      padding: 1rem 2.2rem;
+      text-decoration: none;
+      transition: background .3s, letter-spacing .3s, transform .2s;
+    }
+    .btn-p:hover { background: #d4a47a; letter-spacing: .38em; transform: translateY(-1px); }
+
+    .btn-s {
+      display: inline-block;
+      border: 1px solid rgba(242,233,223,.2);
+      color: #f2e9df;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .65rem; font-weight: 400;
+      letter-spacing: .28em; text-transform: uppercase;
+      padding: 1rem 2.2rem;
+      text-decoration: none;
+      transition: border-color .3s, color .3s, transform .2s;
+    }
+    .btn-s:hover { border-color: #c8956c; color: #c8956c; transform: translateY(-1px); }
+
+    /* ── TAG ── */
+    .tag {
+      font-size: .6rem; letter-spacing: .3em;
+      text-transform: uppercase; color: #c8956c;
+      font-family: 'DM Sans', sans-serif; font-weight: 400;
+    }
+
+    /* ── DIVIDER ── */
+    .hr { height: 1px; background: linear-gradient(to right, transparent, rgba(200,149,108,.25), transparent); }
+
+    /* ── HERO ── */
+    #hero { position: relative; height: 100vh; overflow: hidden; }
+    #hero-img {
+      position: absolute; inset: 0;
+      transform: scale(1.15);
+      will-change: transform;
+    }
+    #hero-img img { width: 100%; height: 100%; object-fit: cover; }
+    #hero-grad {
+      position: absolute; inset: 0;
+      background: linear-gradient(170deg, rgba(15,8,5,.25) 0%, rgba(15,8,5,.55) 55%, rgba(15,8,5,.92) 100%);
+    }
+    #hero-content {
+      position: relative; z-index: 10;
+      height: 100%;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 3rem 5rem;
+      max-width: 1280px; margin: 0 auto;
+    }
+    .hero-h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      font-weight: 300; line-height: .95;
+      color: #f2e9df;
+    }
+    .hero-h1 em { color: #c8956c; font-style: italic; }
+    .hero-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.05rem; font-weight: 300;
+      color: #9e9089; line-height: 1.7;
+      max-width: 38ch;
+    }
+
+    /* Hero scroll line */
+    .scroll-line {
+      position: absolute; right: 3rem; bottom: 5rem;
+      display: flex; flex-direction: column; align-items: center; gap: .75rem;
+    }
+    .scroll-line span { writing-mode: vertical-rl; }
+    .scroll-bar {
+      width: 1px; height: 3.5rem;
+      background: linear-gradient(to bottom, #c8956c, transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: .5; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.15); }
+    }
+
+    /* ── REVEAL ── */
+    .rev {
+      opacity: 0; transform: translateY(44px);
+      transition: opacity .85s cubic-bezier(.16,1,.3,1), transform .85s cubic-bezier(.16,1,.3,1);
+    }
+    .rev.in { opacity: 1; transform: none; }
+    .rev.d1 { transition-delay: .1s; }
+    .rev.d2 { transition-delay: .2s; }
+    .rev.d3 { transition-delay: .32s; }
+    .rev.d4 { transition-delay: .44s; }
+    .rev.d5 { transition-delay: .56s; }
+
+    /* Hero animations */
+    .ha { opacity: 0; transform: translateY(36px); }
+    .ha.a1 { animation: fadeUp 1.1s cubic-bezier(.16,1,.3,1) .35s forwards; }
+    .ha.a2 { animation: fadeUp 1.1s cubic-bezier(.16,1,.3,1) .6s forwards; }
+    .ha.a3 { animation: fadeUp 1.1s cubic-bezier(.16,1,.3,1) .85s forwards; }
+    .ha.a4 { animation: fadeUp 1.1s cubic-bezier(.16,1,.3,1) 1.15s forwards; }
+    .ha.a5 { animation: fadeIn .9s ease 1.6s forwards; }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* ── MENU CARDS ── */
+    .m-card {
+      position: relative; overflow: hidden;
+      aspect-ratio: 3/4;
+    }
+    .m-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(15,8,5,.92) 35%, transparent 75%);
+      pointer-events: none;
+    }
+    .m-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .75s cubic-bezier(.16,1,.3,1);
+    }
+    .m-card:hover img { transform: scale(1.07); }
+    .m-card-body {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      z-index: 2; padding: 1.5rem;
+    }
+
+    /* ── GALLERY ── */
+    .g-item { overflow: hidden; }
+    .g-item img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .8s cubic-bezier(.16,1,.3,1);
+    }
+    .g-item:hover img { transform: scale(1.06); }
+
+    /* ── REVIEW CARD ── */
+    .r-card {
+      border: 1px solid rgba(200,149,108,.12);
+      transition: border-color .3s, transform .3s;
+    }
+    .r-card:hover { border-color: rgba(200,149,108,.38); transform: translateY(-5px); }
+
+    /* ── FLOATING BADGE ── */
+    .badge {
+      background: #c8956c; color: #0f0805;
+      padding: 1.5rem 1.75rem;
+      position: absolute;
+    }
+
+    /* ── LOCATION GRID ── */
+    .loc-map {
+      background: #0d0704;
+      border: 1px solid rgba(200,149,108,.08);
+      position: relative; overflow: hidden;
+    }
+    .loc-map-grid {
+      position: absolute; inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg,   rgba(200,149,108,.04) 0,rgba(200,149,108,.04) 1px, transparent 1px, transparent 60px),
+        repeating-linear-gradient(90deg,  rgba(200,149,108,.04) 0,rgba(200,149,108,.04) 1px, transparent 1px, transparent 60px);
+    }
+
+    /* ── PING ── */
+    @keyframes ping {
+      0% { transform: scale(1); opacity: .7; }
+      75%, 100% { transform: scale(2.2); opacity: 0; }
+    }
+    .ping { animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
+
+    /* ── SECTION GHOST NUMBER ── */
+    .ghost-n {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 8rem; font-weight: 300;
+      color: rgba(200,149,108,.05);
+      line-height: 1;
+      pointer-events: none; user-select: none;
+      position: absolute; top: -1rem; right: 0;
+    }
+
+    /* grain overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 9000;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CURSOR -->
+  <div id="c-dot"></div>
+  <div id="c-ring"></div>
+
+  <!-- ═══════════════════════ NAV ═══════════════════════ -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">Café<span>.</span></a>
+
+    <div style="display:flex;gap:2.5rem;align-items:center">
+      <a href="#menu"     class="nav-link">Menu</a>
+      <a href="#story"    class="nav-link">O nas</a>
+      <a href="#gallery"  class="nav-link">Galeria</a>
+      <a href="#location" class="nav-link">Lokalizacja</a>
+    </div>
+
+    <a href="#menu" class="btn-p" style="padding:.7rem 1.6rem">Zobacz menu</a>
+  </nav>
+
+  <!-- ═══════════════════════ HERO ═══════════════════════ -->
+  <section id="hero">
+    <div id="hero-img">
+      <video autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover">
+        <source src="https://d8j0ntlcm91z4.cloudfront.net/user_3ExDMAbMgv1zj4nHDN284Sb3ram/hf_20260615_190750_0bdfaa76-4356-49d3-8b4f-18bc5b5a6200.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div id="hero-grad"></div>
+
+    <div id="hero-content">
+      <p class="tag ha a1" style="margin-bottom:1.4rem">Specialty Coffee · Kraków</p>
+
+      <h1 class="hero-h1 ha a2" style="margin-bottom:1.4rem">
+        Każda filiżanka<br><em>opowiada historię.</em>
+      </h1>
+
+      <p class="hero-sub ha a3" style="margin-bottom:2.8rem">
+        Świeżo palona kawa, rzemieślnicze wypieki<br>i atmosfera, do której chce się wracać.
+      </p>
+
+      <div class="ha a4" style="display:flex;gap:1rem;flex-wrap:wrap">
+        <a href="#menu"     class="btn-p">Zobacz menu</a>
+        <a href="#location" class="btn-s">Sprawdź lokalizację</a>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-line ha a5">
+      <span class="tag" style="font-size:.55rem">Przewiń</span>
+      <div class="scroll-bar"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ MENU ═══════════════════════ -->
+  <section id="menu" style="padding:7rem 3rem;max-width:1280px;margin:0 auto">
+
+    <div class="rev" style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3.5rem;flex-wrap:wrap;gap:1rem">
+      <div>
+        <p class="tag" style="margin-bottom:.75rem">Wybrane pozycje</p>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4rem);font-weight:300;line-height:1.05">
+          Nasze <em style="color:#c8956c">bestsellery</em>
+        </h2>
+      </div>
+      <a href="#" class="btn-s">Pełne menu →</a>
+    </div>
+
+    <!-- Grid -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem">
+
+      <div class="m-card rev d1">
+        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80" alt="Espresso">
+        <div class="m-card-body">
+          <p class="tag" style="margin-bottom:.3rem">Espresso</p>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between">
+            <div>
+              <p style="font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:300;color:#f2e9df">Single Origin</p>
+              <p style="font-size:.8rem;color:#9e9089;font-weight:300;margin-top:.2rem">Intensywny, z nutą ciemnej czekolady</p>
+            </div>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#c8956c;margin-left:1rem">9 zł</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tall card -->
+      <div class="m-card rev d2" style="grid-row:span 2;aspect-ratio:auto">
+        <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80" alt="Cappuccino" style="height:100%">
+        <div class="m-card-body">
+          <p class="tag" style="margin-bottom:.3rem">Cappuccino</p>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between">
+            <div>
+              <p style="font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:300;color:#f2e9df">Tradycyjne</p>
+              <p style="font-size:.8rem;color:#9e9089;font-weight:300;margin-top:.2rem">Kremowa pianka, perfekcyjny balans</p>
+            </div>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#c8956c;margin-left:1rem">13 zł</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-card rev d3">
+        <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&q=80" alt="Flat White">
+        <div class="m-card-body">
+          <p class="tag" style="margin-bottom:.3rem">Flat White</p>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between">
+            <div>
+              <p style="font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:300;color:#f2e9df">Australijski styl</p>
+              <p style="font-size:.8rem;color:#9e9089;font-weight:300;margin-top:.2rem">Podwójny ristretto, aksamitne mleko</p>
+            </div>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#c8956c;margin-left:1rem">15 zł</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-card rev d2">
+        <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&q=80" alt="Croissant">
+        <div class="m-card-body">
+          <p class="tag" style="margin-bottom:.3rem">Pieczywo</p>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between">
+            <div>
+              <p style="font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:300;color:#f2e9df">Croissant maślany</p>
+              <p style="font-size:.8rem;color:#9e9089;font-weight:300;margin-top:.2rem">Pieczony rano, 72h fermentacja</p>
+            </div>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#c8956c;margin-left:1rem">11 zł</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-card rev d3">
+        <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80" alt="Cheesecake">
+        <div class="m-card-body">
+          <p class="tag" style="margin-bottom:.3rem">Deser</p>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between">
+            <div>
+              <p style="font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:300;color:#f2e9df">Cheesecake</p>
+              <p style="font-size:.8rem;color:#9e9089;font-weight:300;margin-top:.2rem">Domowy, bez pieczenia, wanilia Bourbon</p>
+            </div>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#c8956c;margin-left:1rem">16 zł</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA after menu -->
+    <div class="rev" style="text-align:center;margin-top:3.5rem">
+      <a href="#" class="btn-p">Zarezerwuj stolik</a>
+    </div>
+  </section>
+
+  <div class="hr" style="margin:0 3rem"></div>
+
+  <!-- ═══════════════════════ STORY ═══════════════════════ -->
+  <section id="story" style="padding:7rem 3rem;max-width:1280px;margin:0 auto">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center">
+
+      <!-- Image col -->
+      <div class="rev" style="position:relative">
+        <div style="aspect-ratio:4/5;overflow:hidden">
+          <img
+            src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800&q=80"
+            alt="Barista"
+            style="width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.16,1,.3,1)"
+            onmouseover="this.style.transform='scale(1.04)'"
+            onmouseout="this.style.transform='scale(1)'"
+          >
+        </div>
+        <!-- Badge -->
+        <div class="badge rev d3" style="bottom:-1.5rem;right:-1.5rem">
+          <p style="font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;line-height:1">12</p>
+          <p style="font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;font-family:'DM Sans',sans-serif">lat pasji</p>
+        </div>
+      </div>
+
+      <!-- Text col -->
+      <div>
+        <p class="tag rev" style="margin-bottom:1.25rem">Nasza historia</p>
+        <h2 class="rev d1" style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,4.5vw,3.8rem);font-weight:300;line-height:1.1;margin-bottom:2rem">
+          Zaczęło się od<br><em style="color:#c8956c">jednej filiżanki.</em>
+        </h2>
+
+        <div class="rev d2" style="display:flex;flex-direction:column;gap:1.1rem;color:#9e9089;font-weight:300;line-height:1.8;font-size:.95rem">
+          <p>Wszystko zaczęło się od fascynacji — nie tylko smakiem, ale całym rytuałem parzenia. Od ziarna, przez palarnię, po każdy gest baristy.</p>
+          <p>Wybieramy tylko ziarna specialty od małych, pasjonackich palarni w Europie. Każda partia selekcjonowana ręcznie. Zero kompromisów.</p>
+          <p>Chcieliśmy miejsca, do którego się wraca — nie z przyzwyczajenia, ale z wyboru.</p>
+        </div>
+
+        <div class="rev d3" style="margin-top:2.5rem">
+          <div class="hr" style="margin-bottom:2rem"></div>
+          <div style="display:flex;gap:3rem">
+            <div>
+              <p style="font-family:'Cormorant Garamond',serif;font-size:2.8rem;color:#c8956c;font-weight:300">47+</p>
+              <p class="tag" style="margin-top:.3rem">rodzajów kaw rocznie</p>
+            </div>
+            <div>
+              <p style="font-family:'Cormorant Garamond',serif;font-size:2.8rem;color:#c8956c;font-weight:300">∞</p>
+              <p class="tag" style="margin-top:.3rem">powodów, by wrócić</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="rev d4" style="margin-top:2.5rem">
+          <a href="#" class="btn-s">Poznaj naszą filozofię →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ EXPERIENCE ═══════════════════════ -->
+  <section style="position:relative;padding:9rem 3rem;text-align:center;overflow:hidden">
+    <div style="position:absolute;inset:0">
+      <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1920&q=80" alt="" style="width:100%;height:100%;object-fit:cover">
+      <div style="position:absolute;inset:0;background:rgba(15,8,5,.78)"></div>
+    </div>
+
+    <div style="position:relative;z-index:2;max-width:860px;margin:0 auto" class="rev">
+      <p class="tag" style="margin-bottom:1.5rem">Doświadczenie</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,6.5rem);font-weight:300;line-height:.95;margin-bottom:1.5rem">
+        Więcej niż<br><em style="color:#c8956c">kawa.</em>
+      </h2>
+      <p style="font-size:1.1rem;font-weight:300;color:#9e9089;max-width:44ch;margin:0 auto 3rem;line-height:1.75">
+        Miejsce, gdzie koncentracja przychodzi sama. Spotkanie, które trwa dłużej niż planowałeś. Chwila, która zostaje w pamięci.
+      </p>
+
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem" class="rev d2">
+        <span style="border:1px solid rgba(200,149,108,.3);color:rgba(200,149,108,.75);padding:.6rem 1.4rem;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;font-family:'DM Sans',sans-serif">Praca zdalna</span>
+        <span style="border:1px solid rgba(200,149,108,.3);color:rgba(200,149,108,.75);padding:.6rem 1.4rem;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;font-family:'DM Sans',sans-serif">Spotkania</span>
+        <span style="border:1px solid rgba(200,149,108,.3);color:rgba(200,149,108,.75);padding:.6rem 1.4rem;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;font-family:'DM Sans',sans-serif">Czas dla siebie</span>
+        <span style="border:1px solid rgba(200,149,108,.3);color:rgba(200,149,108,.75);padding:.6rem 1.4rem;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;font-family:'DM Sans',sans-serif">Relaks</span>
+        <span style="border:1px solid rgba(200,149,108,.3);color:rgba(200,149,108,.75);padding:.6rem 1.4rem;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;font-family:'DM Sans',sans-serif">Inspiracja</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ GALLERY ═══════════════════════ -->
+  <section id="gallery" style="padding:7rem 3rem;max-width:1280px;margin:0 auto">
+
+    <div class="rev" style="margin-bottom:3.5rem">
+      <p class="tag" style="margin-bottom:.75rem">Atmosfera</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4rem);font-weight:300">
+        Poczuj <em style="color:#c8956c">klimat</em>
+      </h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:.75rem">
+
+      <div class="g-item rev d1" style="aspect-ratio:1">
+        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80" alt="Wnętrze kawiarni">
+      </div>
+
+      <div class="g-item rev d2" style="grid-row:span 2">
+        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600&q=80" alt="Kawa" style="height:100%">
+      </div>
+
+      <div class="g-item rev d3" style="aspect-ratio:1">
+        <img src="https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=600&q=80" alt="Latte art">
+      </div>
+
+      <div class="g-item rev d1" style="aspect-ratio:1">
+        <img src="https://images.unsplash.com/photo-1493770348161-369560ae357d?w=600&q=80" alt="Okno kawiarni">
+      </div>
+
+      <div class="g-item rev d3" style="aspect-ratio:1">
+        <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80" alt="Szczegół">
+      </div>
+
+    </div>
+  </section>
+
+  <div class="hr" style="margin:0 3rem"></div>
+
+  <!-- ═══════════════════════ REVIEWS ═══════════════════════ -->
+  <section style="padding:7rem 3rem;max-width:1280px;margin:0 auto">
+
+    <div class="rev" style="text-align:center;margin-bottom:4rem">
+      <p class="tag" style="margin-bottom:.75rem">Opinie</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4rem);font-weight:300">
+        Co mówią <em style="color:#c8956c">goście</em>
+      </h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem">
+
+      <div class="r-card rev d1" style="padding:2.2rem">
+        <p style="color:#c8956c;font-size:.9rem;margin-bottom:1.5rem;letter-spacing:.1em">★★★★★</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;font-style:italic;color:#f2e9df;line-height:1.7;margin-bottom:1.8rem">
+          „Najlepsza kawa w Krakowie, bez żadnych wątpliwości. Espresso — złożone, gęste, idealne. Wracam tu co tydzień."
+        </p>
+        <div style="display:flex;align-items:center;gap:.8rem">
+          <div style="width:2rem;height:2rem;border-radius:50%;background:rgba(200,149,108,.15);display:flex;align-items:center;justify-content:center">
+            <span style="font-size:.6rem;color:#c8956c;font-family:'DM Sans',sans-serif">MK</span>
+          </div>
+          <div>
+            <p style="font-size:.85rem;color:#f2e9df">Marta K.</p>
+            <p class="tag" style="font-size:.55rem;margin-top:.1rem">Freelancerka</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="r-card rev d2" style="padding:2.2rem">
+        <p style="color:#c8956c;font-size:.9rem;margin-bottom:1.5rem;letter-spacing:.1em">★★★★★</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;font-style:italic;color:#f2e9df;line-height:1.7;margin-bottom:1.8rem">
+          „Klimat, który zapamiętujesz. Siedziałem tu 4 godziny i czas minął jak chwila. Croissant — absolutnie niebywały."
+        </p>
+        <div style="display:flex;align-items:center;gap:.8rem">
+          <div style="width:2rem;height:2rem;border-radius:50%;background:rgba(200,149,108,.15);display:flex;align-items:center;justify-content:center">
+            <span style="font-size:.6rem;color:#c8956c;font-family:'DM Sans',sans-serif">PW</span>
+          </div>
+          <div>
+            <p style="font-size:.85rem;color:#f2e9df">Paweł W.</p>
+            <p class="tag" style="font-size:.55rem;margin-top:.1rem">Fotograf</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="r-card rev d3" style="padding:2.2rem">
+        <p style="color:#c8956c;font-size:.9rem;margin-bottom:1.5rem;letter-spacing:.1em">★★★★★</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;font-style:italic;color:#f2e9df;line-height:1.7;margin-bottom:1.8rem">
+          „Obsługa na najwyższym poziomie. Barista wyjaśnił każdy szczegół. Flat white — absolutna perfekcja w filiżance."
+        </p>
+        <div style="display:flex;align-items:center;gap:.8rem">
+          <div style="width:2rem;height:2rem;border-radius:50%;background:rgba(200,149,108,.15);display:flex;align-items:center;justify-content:center">
+            <span style="font-size:.6rem;color:#c8956c;font-family:'DM Sans',sans-serif">AZ</span>
+          </div>
+          <div>
+            <p style="font-size:.85rem;color:#f2e9df">Anna Z.</p>
+            <p class="tag" style="font-size:.55rem;margin-top:.1rem">Architektka</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ LOCATION ═══════════════════════ -->
+  <section id="location" style="padding:7rem 3rem;max-width:1280px;margin:0 auto">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center">
+
+      <!-- Map placeholder -->
+      <div class="loc-map rev" style="aspect-ratio:1">
+        <div class="loc-map-grid"></div>
+        <div style="position:relative;z-index:2;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;gap:.75rem">
+          <div style="position:relative;width:14px;height:14px">
+            <div style="width:14px;height:14px;background:#c8956c;border-radius:50%;position:relative;z-index:2"></div>
+            <div class="ping" style="width:14px;height:14px;background:#c8956c;border-radius:50%;position:absolute;top:0;left:0;opacity:.5"></div>
+          </div>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#f2e9df">ul. Floriańska 23</p>
+          <p class="tag">Kraków, Stare Miasto</p>
+        </div>
+        <p class="tag" style="position:absolute;bottom:1rem;right:1.25rem;font-size:.5rem;opacity:.3">Mapa wkrótce</p>
+      </div>
+
+      <!-- Info -->
+      <div>
+        <p class="tag rev" style="margin-bottom:1.25rem">Znajdź nas</p>
+        <h2 class="rev d1" style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,4.5vw,3.8rem);font-weight:300;line-height:1.1;margin-bottom:3rem">
+          Zapraszamy<br><em style="color:#c8956c">codziennie.</em>
+        </h2>
+
+        <div class="rev d2" style="display:flex;flex-direction:column;gap:1.75rem">
+          <div>
+            <p class="tag" style="margin-bottom:.5rem">Adres</p>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#f2e9df">ul. Floriańska 23</p>
+            <p style="color:#9e9089;font-weight:300;font-size:.9rem">31-021 Kraków</p>
+          </div>
+
+          <div class="hr"></div>
+
+          <div>
+            <p class="tag" style="margin-bottom:.75rem">Godziny otwarcia</p>
+            <div style="display:flex;flex-direction:column;gap:.4rem;font-weight:300;font-size:.9rem">
+              <div style="display:flex;justify-content:space-between;color:#f2e9df">
+                <span>Poniedziałek – Piątek</span>
+                <span style="color:#c8956c">7:00 – 21:00</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;color:#f2e9df">
+                <span>Sobota – Niedziela</span>
+                <span style="color:#c8956c">8:00 – 22:00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div>
+            <p class="tag" style="margin-bottom:.5rem">Kontakt</p>
+            <p style="color:#f2e9df;font-weight:300;font-size:.9rem">hello@cafe.pl</p>
+            <p style="color:#f2e9df;font-weight:300;font-size:.9rem">+48 12 345 67 89</p>
+          </div>
+        </div>
+
+        <div class="rev d3" style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:2.5rem">
+          <a href="#" class="btn-p">Wyznacz trasę</a>
+          <a href="#" class="btn-s">Zarezerwuj stolik</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+  <footer style="border-top:1px solid rgba(200,149,108,.1);padding:3.5rem 3rem">
+    <div style="max-width:1280px;margin:0 auto">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem;margin-bottom:2rem">
+        <div>
+          <a href="#" class="nav-logo">Café<span>.</span></a>
+          <p style="font-size:.8rem;color:#9e9089;font-weight:300;margin-top:.3rem">Specialty Coffee · Kraków</p>
+        </div>
+
+        <div style="display:flex;gap:2rem;flex-wrap:wrap">
+          <a href="#menu"     class="nav-link">Menu</a>
+          <a href="#story"    class="nav-link">O nas</a>
+          <a href="#gallery"  class="nav-link">Galeria</a>
+          <a href="#location" class="nav-link">Kontakt</a>
+        </div>
+
+        <div style="display:flex;gap:1.5rem">
+          <a href="#" class="nav-link">Instagram</a>
+          <a href="#" class="nav-link">Facebook</a>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-top:1.5rem">
+        <p style="font-size:.7rem;color:rgba(158,144,137,.35)">© 2025 Café. Wszelkie prawa zastrzeżone.</p>
+        <div style="display:flex;align-items:center;gap:2rem">
+          <a href="polityka-prywatnosci.html" class="nav-link" style="font-size:.6rem;opacity:.4;transition:opacity .25s" onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='.4'">Polityka prywatności</a>
+          <p style="font-size:.7rem;color:rgba(158,144,137,.35)">Stworzone z pasją do kawy.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════ SCRIPTS ═══════════════════════ -->
+  <script>
+    /* ── Cursor — scale-based (no layout reflow) ── */
+    const dot  = document.getElementById('c-dot');
+    const ring = document.getElementById('c-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    let rScale = 1, rTargetScale = 1;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = `translate3d(${mx - 3.5}px,${my - 3.5}px,0)`;
+    }, { passive: true });
+
+    (function rafLoop() {
+      rx += (mx - rx) * .09;
+      ry += (my - ry) * .09;
+      rScale += (rTargetScale - rScale) * .12;
+      ring.style.transform = `translate3d(${rx - 19}px,${ry - 19}px,0) scale(${rScale.toFixed(3)})`;
+      requestAnimationFrame(rafLoop);
+    })();
+
+    document.querySelectorAll('a,button').forEach(el => {
+      el.addEventListener('mouseenter', () => { rTargetScale = 1.6; ring.style.borderColor = 'rgba(200,149,108,.8)'; });
+      el.addEventListener('mouseleave', () => { rTargetScale = 1;   ring.style.borderColor = 'rgba(200,149,108,.45)'; });
+    });
+
+    /* ── Single RAF-throttled scroll handler ── */
+    const navEl  = document.getElementById('nav');
+    const heroBg = document.getElementById('hero-img');
+    const heroH  = document.getElementById('hero').offsetHeight;
+    let lastY = 0, rafPending = false;
+
+    function applyScroll() {
+      rafPending = false;
+      navEl.classList.toggle('stuck', lastY > 60);
+      if (lastY < heroH) {
+        heroBg.style.transform = `translate3d(0,${(lastY * 0.07).toFixed(1)}px,0) scale(1.15)`;
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      lastY = window.scrollY;
+      if (!rafPending) { rafPending = true; requestAnimationFrame(applyScroll); }
+    }, { passive: true });
+
+    /* ── Scroll reveal ── */
+    const revObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.rev').forEach(el => revObs.observe(el));
+
+    /* ── Smooth anchors ── */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+  </script>
+</body>
+</html>
