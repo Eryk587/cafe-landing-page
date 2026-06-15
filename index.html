@@ -625,18 +625,14 @@
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center">
 
-      <!-- Map placeholder -->
-      <div class="loc-map rev" style="aspect-ratio:1">
-        <div class="loc-map-grid"></div>
-        <div style="position:relative;z-index:2;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;gap:.75rem">
-          <div style="position:relative;width:14px;height:14px">
-            <div style="width:14px;height:14px;background:#c8956c;border-radius:50%;position:relative;z-index:2"></div>
-            <div class="ping" style="width:14px;height:14px;background:#c8956c;border-radius:50%;position:absolute;top:0;left:0;opacity:.5"></div>
-          </div>
-          <p style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#f2e9df">ul. Floriańska 23</p>
-          <p class="tag">Kraków, Stare Miasto</p>
-        </div>
-        <p class="tag" style="position:absolute;bottom:1rem;right:1.25rem;font-size:.5rem;opacity:.3">Mapa wkrótce</p>
+      <!-- Google Maps -->
+      <div class="rev" style="aspect-ratio:1;overflow:hidden;position:relative;border:1px solid rgba(200,149,108,.08)">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2561.4914986707576!2d19.936657!3d50.062615!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47165b4f4a65d97f%3A0x5d0c4b0e4b0e4b0e!2sFlorianity%2023%2C%2031-021%20Krak%C3%B3w!5e0!3m2!1spl!2spl!4v1718000000000!5m2!1spl!2spl"
+          width="100%" height="100%"
+          style="border:0;display:block;filter:grayscale(100%) invert(1) contrast(0.85) brightness(0.55) sepia(0.25)"
+          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
       </div>
 
       <!-- Info -->
