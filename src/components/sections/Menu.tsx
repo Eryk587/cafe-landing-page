@@ -1,5 +1,6 @@
 'use client'
 import { motion } from 'framer-motion'
+import { useReservation } from '@/context/ReservationContext'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -39,6 +40,7 @@ const items = [
 ]
 
 export default function Menu() {
+  const { open } = useReservation()
   return (
     <section id="menu" className="px-5 md:px-12 py-32 max-w-screen-xl mx-auto">
       {/* Header */}
@@ -98,7 +100,7 @@ export default function Menu() {
 
       {/* CTA */}
       <motion.div {...reveal(0.1)} className="text-center mt-20">
-        <a href="#location" className="btn-p">Zarezerwuj stolik</a>
+        <button onClick={open} className="btn-p">Zarezerwuj stolik</button>
       </motion.div>
     </section>
   )

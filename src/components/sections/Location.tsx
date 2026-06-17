@@ -1,5 +1,6 @@
 'use client'
 import { motion } from 'framer-motion'
+import { useReservation } from '@/context/ReservationContext'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -11,6 +12,7 @@ const reveal = (delay = 0) => ({
 })
 
 export default function Location() {
+  const { open } = useReservation()
   return (
     <section id="location" className="px-5 md:px-12 py-32 max-w-screen-xl mx-auto">
       <div className="grid md:grid-cols-2 gap-10 md:gap-20 items-center">
@@ -76,7 +78,7 @@ export default function Location() {
             <a href="https://maps.google.com/?q=Floriańska+23+Kraków" target="_blank" rel="noopener" className="btn-p">
               Wyznacz trasę
             </a>
-            <a href="#location" className="btn-s">Zarezerwuj stolik</a>
+            <button onClick={open} className="btn-s">Zarezerwuj stolik</button>
           </motion.div>
         </div>
       </div>

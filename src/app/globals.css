@@ -80,6 +80,28 @@ body::after {
 }
 .nav-link:hover { color: #f2e9df; }
 
+/* ── FORM INPUTS ── */
+.form-input {
+  width: 100%;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(200,149,108,.2);
+  color: #f2e9df;
+  padding: .9rem 1rem;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: .88rem;
+  font-weight: 300;
+  outline: none;
+  transition: border-color .2s ease;
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+}
+.form-input:focus { border-color: rgba(200,149,108,.55); }
+.form-input::placeholder { color: rgba(158,144,137,.38); }
+.form-input-error { border-color: rgba(210,80,80,.45) !important; }
+.form-input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.55); cursor: pointer; }
+select.form-input option { background: #1a1008; color: #f2e9df; }
+
 /* ── KEYFRAMES ── */
 @keyframes scrollPulse {
   0%, 100% { opacity: .5; transform: scaleY(1); }

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useReservation } from '@/context/ReservationContext'
 
 const links = [
   { href: '#menu',     label: 'Menu' },
@@ -13,6 +14,7 @@ const links = [
 export default function Nav() {
   const [stuck, setStuck] = useState(false)
   const [open,  setOpen]  = useState(false)
+  const { open: openReservation } = useReservation()
 
   useEffect(() => {
     const onScroll = () => setStuck(window.scrollY > 60)
@@ -92,7 +94,7 @@ export default function Nav() {
               </motion.a>
             ))}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.32 }} className="mt-4">
-              <a href="#location" className="btn-p" onClick={close}>Zarezerwuj stolik</a>
+              <button className="btn-p" onClick={() => { close(); openReservation() }}>Zarezerwuj stolik</button>
             </motion.div>
           </motion.div>
         )}
