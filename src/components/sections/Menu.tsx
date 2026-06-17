@@ -78,7 +78,7 @@ export default function Menu() {
                 src={item.img}
                 alt={item.name}
                 fill
-                sizes="(max-width: 768px) 100vw, 33vw"
+                sizes="33vw"
                 className="object-cover transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.07]"
               />
             </div>

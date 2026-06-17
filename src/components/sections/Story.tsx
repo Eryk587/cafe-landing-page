@@ -42,7 +42,7 @@ export default function Story() {
               src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800&q=80"
               alt="Barista przygotowujący kawę"
               fill
-              sizes="(max-width: 768px) 100vw, 50vw"
+              sizes="(max-width: 768px) 95vw, 50vw"
               className="object-cover transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] hover:scale-[1.04]"
             />
           </div>

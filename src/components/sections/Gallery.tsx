@@ -51,7 +51,7 @@ export default function Gallery() {
               src={p.src}
               alt={p.alt}
               fill
-              sizes="(max-width: 768px) 100vw, 33vw"
+              sizes="(max-width: 768px) 50vw, 33vw"
               className="object-cover transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.06]"
             />
           </motion.div>
