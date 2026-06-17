@@ -57,11 +57,16 @@ export default function Menu() {
         {items.map((item, i) => (
           <motion.div
             key={i}
-            {...reveal(i * 0.08)}
+            initial={{ opacity: 0, y: 56, scale: 0.96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.9, ease, delay: i * 0.11 }}
+            viewport={{ once: true, margin: '-40px' }}
+            whileHover={{ y: -6 }}
             className="relative overflow-hidden group"
             style={{
               aspectRatio: item.tall ? 'auto' : '3/4',
               gridRow: item.tall ? 'span 2' : undefined,
+              transition: 'box-shadow 0.3s ease',
             }}
           >
             {/* Image */}
@@ -77,7 +82,7 @@ export default function Menu() {
             <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(15,8,5,.92) 35%, transparent 75%)' }} />
 
             {/* Info */}
-            <div className="absolute bottom-0 left-0 right-0 z-10 p-6">
+            <div className="absolute bottom-0 left-0 right-0 z-10 p-6 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-y-1">
               <p className="tag mb-1">{item.tag}</p>
               <div className="flex items-end justify-between">
                 <div>

@@ -1,28 +1,35 @@
 'use client'
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
 const tags = ['Praca zdalna', 'Spotkania', 'Czas dla siebie', 'Relaks', 'Inspiracja']
 
 export default function Experience() {
+  const ref = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const bgY = useTransform(scrollYProgress, [0, 1], ['-10%', '10%'])
+
   return (
-    <section className="relative py-44 px-5 md:px-12 text-center overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0">
+    <section ref={ref} className="relative py-44 px-5 md:px-12 text-center overflow-hidden">
+      {/* Background image with parallax */}
+      <motion.div className="absolute inset-0 will-change-transform" style={{ scale: 1.22, y: bgY }}>
         <img
           src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1920&q=80"
           alt=""
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0" style={{ background: 'rgba(15,8,5,.78)' }} />
-      </div>
+      </motion.div>
+      <div className="absolute inset-0" style={{ background: 'rgba(15,8,5,.78)' }} />
 
       <div className="relative z-10 max-w-3xl mx-auto">
         <motion.p
           className="tag mb-6"
-          initial={{ opacity: 0, y: 44 }} whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.85, ease }} viewport={{ once: true, margin: '-40px' }}
+          initial={{ opacity: 0, y: 44 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.85, ease }}
+          viewport={{ once: true, margin: '-40px' }}
         >
           Doświadczenie
         </motion.p>
@@ -30,8 +37,10 @@ export default function Experience() {
         <motion.h2
           className="font-serif font-light leading-[.95] mb-6"
           style={{ fontSize: 'clamp(3rem,8vw,6.5rem)' }}
-          initial={{ opacity: 0, y: 44 }} whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.85, ease, delay: 0.1 }} viewport={{ once: true, margin: '-40px' }}
+          initial={{ opacity: 0, y: 44 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.85, ease, delay: 0.1 }}
+          viewport={{ once: true, margin: '-40px' }}
         >
           Więcej niż<br /><em className="text-caramel">kawa.</em>
         </motion.h2>
@@ -39,19 +48,18 @@ export default function Experience() {
         <motion.p
           className="font-sans font-light text-mist leading-[1.75] mx-auto mb-12"
           style={{ fontSize: '1.1rem', maxWidth: '44ch' }}
-          initial={{ opacity: 0, y: 44 }} whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.85, ease, delay: 0.2 }} viewport={{ once: true, margin: '-40px' }}
+          initial={{ opacity: 0, y: 44 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.85, ease, delay: 0.2 }}
+          viewport={{ once: true, margin: '-40px' }}
         >
           Miejsce, gdzie koncentracja przychodzi sama. Spotkanie, które trwa dłużej niż planowałeś. Chwila, która zostaje w pamięci.
         </motion.p>
 
-        <motion.div
-          className="flex flex-wrap justify-center gap-3"
-          initial={{ opacity: 0, y: 44 }} whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.85, ease, delay: 0.3 }} viewport={{ once: true, margin: '-40px' }}
-        >
-          {tags.map(t => (
-            <span
+        {/* Tags — each staggered individually */}
+        <div className="flex flex-wrap justify-center gap-3">
+          {tags.map((t, i) => (
+            <motion.span
               key={t}
               className="font-sans"
               style={{
@@ -62,11 +70,16 @@ export default function Experience() {
                 letterSpacing: '.28em',
                 textTransform: 'uppercase',
               }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease, delay: 0.3 + i * 0.09 }}
+              viewport={{ once: true, margin: '-40px' }}
+              whileHover={{ borderColor: 'rgba(200,149,108,.65)', color: 'rgba(200,149,108,1)' }}
             >
               {t}
-            </span>
+            </motion.span>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

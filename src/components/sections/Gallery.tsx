@@ -16,8 +16,10 @@ export default function Gallery() {
     <section id="gallery" className="px-5 md:px-12 py-32 max-w-screen-xl mx-auto">
       <motion.div
         className="mb-20"
-        initial={{ opacity: 0, y: 44 }} whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.85, ease: [0.16,1,.3,1] }} viewport={{ once: true, margin: '-40px' }}
+        initial={{ opacity: 0, y: 44 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.85, ease }}
+        viewport={{ once: true, margin: '-40px' }}
       >
         <p className="tag mb-3">Atmosfera</p>
         <h2 className="font-serif font-light" style={{ fontSize: 'clamp(2.4rem,5vw,4rem)' }}>
@@ -37,10 +39,11 @@ export default function Gallery() {
               aspectRatio: p.tall ? undefined : '1',
               gridRow: p.tall ? 'span 2' : undefined,
             }}
-            initial={{ opacity: 0, y: 44 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, ease, delay: i * 0.07 }}
-            viewport={{ once: true, margin: '-40px' }}
+            initial={{ opacity: 0, scale: 0.92, y: i % 2 === 0 ? 50 : 30 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1, ease, delay: i * 0.09 }}
+            viewport={{ once: true, margin: '-60px' }}
+            whileHover={{ scale: 1.01 }}
           >
             <img
               src={p.src}

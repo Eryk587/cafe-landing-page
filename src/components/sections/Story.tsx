@@ -1,5 +1,6 @@
 'use client'
-import { motion } from 'framer-motion'
+import { useRef, useEffect, useState } from 'react'
+import { motion, useInView, animate } from 'framer-motion'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -9,6 +10,24 @@ const reveal = (delay = 0) => ({
   transition: { duration: 0.85, ease, delay },
   viewport: { once: true, margin: '-40px' },
 })
+
+function Counter({ target, suffix = '' }: { target: number; suffix?: string }) {
+  const [value, setValue] = useState(0)
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  useEffect(() => {
+    if (!inView) return
+    const controls = animate(0, target, {
+      duration: 2.2,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => setValue(Math.round(v)),
+    })
+    return controls.stop
+  }, [inView, target])
+
+  return <span ref={ref}>{value}{suffix}</span>
+}
 
 export default function Story() {
   return (
@@ -24,11 +43,14 @@ export default function Story() {
               className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] hover:scale-[1.04]"
             />
           </div>
-          {/* Badge */}
+
+          {/* Badge — floats gently */}
           <motion.div
             {...reveal(0.3)}
             className="absolute -bottom-6 -right-6 hidden md:block"
             style={{ background: '#c8956c', color: '#0f0805', padding: '1.5rem 1.75rem' }}
+            animate={{ y: [0, -9, 0] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: 1.8 }}
           >
             <p className="font-serif font-light leading-none" style={{ fontSize: '3rem' }}>12</p>
             <p className="tag" style={{ color: '#0f0805', marginTop: '.25rem' }}>lat pasji</p>
@@ -48,7 +70,11 @@ export default function Story() {
             <em className="text-caramel">jednej filiżanki.</em>
           </motion.h2>
 
-          <motion.div {...reveal(0.2)} className="flex flex-col gap-4 font-sans font-light text-mist leading-[1.8]" style={{ fontSize: '.95rem' }}>
+          <motion.div
+            {...reveal(0.2)}
+            className="flex flex-col gap-4 font-sans font-light text-mist leading-[1.8]"
+            style={{ fontSize: '.95rem' }}
+          >
             <p>Wszystko zaczęło się od fascynacji — nie tylko smakiem, ale całym rytuałem parzenia. Od ziarna, przez palarnię, po każdy gest baristy.</p>
             <p>Wybieramy tylko ziarna specialty od małych, pasjonackich palarni w Europie. Każda partia selekcjonowana ręcznie. Zero kompromisów.</p>
             <p>Chcieliśmy miejsca, do którego się wraca — nie z przyzwyczajenia, ale z wyboru.</p>
@@ -58,7 +84,9 @@ export default function Story() {
             <div className="hr-line mb-8" />
             <div className="flex gap-12">
               <div>
-                <p className="font-serif font-light text-caramel" style={{ fontSize: '2.8rem' }}>47+</p>
+                <p className="font-serif font-light text-caramel" style={{ fontSize: '2.8rem' }}>
+                  <Counter target={47} suffix="+" />
+                </p>
                 <p className="tag mt-1">rodzajów kaw rocznie</p>
               </div>
               <div>
