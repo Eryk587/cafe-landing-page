@@ -7,7 +7,7 @@ const tags = ['Praca zdalna', 'Spotkania', 'Czas dla siebie', 'Relaks', 'Inspira
 
 export default function Experience() {
   return (
-    <section className="relative py-36 px-5 md:px-12 text-center overflow-hidden">
+    <section className="relative py-44 px-5 md:px-12 text-center overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0">
         <img

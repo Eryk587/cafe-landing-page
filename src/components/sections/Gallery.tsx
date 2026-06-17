@@ -13,9 +13,9 @@ const photos = [
 
 export default function Gallery() {
   return (
-    <section id="gallery" className="px-5 md:px-12 py-24 max-w-screen-xl mx-auto">
+    <section id="gallery" className="px-5 md:px-12 py-32 max-w-screen-xl mx-auto">
       <motion.div
-        className="mb-14"
+        className="mb-20"
         initial={{ opacity: 0, y: 44 }} whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.85, ease: [0.16,1,.3,1] }} viewport={{ once: true, margin: '-40px' }}
       >

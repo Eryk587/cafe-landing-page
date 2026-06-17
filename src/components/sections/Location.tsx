@@ -12,7 +12,7 @@ const reveal = (delay = 0) => ({
 
 export default function Location() {
   return (
-    <section id="location" className="px-5 md:px-12 py-24 max-w-screen-xl mx-auto">
+    <section id="location" className="px-5 md:px-12 py-32 max-w-screen-xl mx-auto">
       <div className="grid md:grid-cols-2 gap-10 md:gap-20 items-center">
 
         {/* Map */}

@@ -23,11 +23,11 @@ const reviews = [
 
 export default function Reviews() {
   return (
-    <section className="px-5 md:px-12 py-24 max-w-screen-xl mx-auto">
+    <section className="px-5 md:px-12 py-32 max-w-screen-xl mx-auto">
       <div className="hr-line mb-0" />
 
       <motion.div
-        className="text-center mb-16 mt-16"
+        className="text-center mb-20 mt-20"
         initial={{ opacity: 0, y: 44 }} whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.85, ease }} viewport={{ once: true, margin: '-40px' }}
       >

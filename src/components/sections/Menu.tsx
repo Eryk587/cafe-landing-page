@@ -40,9 +40,9 @@ const items = [
 
 export default function Menu() {
   return (
-    <section id="menu" className="px-5 md:px-12 py-24 max-w-screen-xl mx-auto">
+    <section id="menu" className="px-5 md:px-12 py-32 max-w-screen-xl mx-auto">
       {/* Header */}
-      <motion.div {...reveal()} className="flex items-end justify-between mb-14 flex-wrap gap-4">
+      <motion.div {...reveal()} className="flex items-end justify-between mb-20 flex-wrap gap-4">
         <div>
           <p className="tag mb-3">Wybrane pozycje</p>
           <h2 className="font-serif font-light leading-[1.05]" style={{ fontSize: 'clamp(2.4rem,5vw,4rem)' }}>
@@ -92,7 +92,7 @@ export default function Menu() {
       </div>
 
       {/* CTA */}
-      <motion.div {...reveal(0.1)} className="text-center mt-14">
+      <motion.div {...reveal(0.1)} className="text-center mt-20">
         <a href="#location" className="btn-p">Zarezerwuj stolik</a>
       </motion.div>
     </section>

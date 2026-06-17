@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@source "../**/*.{tsx,ts,jsx,js}";
+@source "../";
 
 @theme {
   --color-espresso: #0f0805;
@@ -88,4 +88,167 @@ body::after {
 @keyframes ping {
   0%         { transform: scale(1); opacity: .7; }
   75%, 100%  { transform: scale(2.2); opacity: 0; }
+}
+
+/* ── UTILITY FALLBACKS ──────────────────────────────────────────
+   Tailwind v4 auto-scanner may miss src/components/ in some build
+   environments. These direct declarations guarantee correct output.
+   Non-layered CSS always beats @layer utilities in the cascade.
+──────────────────────────────────────────────────────────────── */
+
+/* Position */
+.fixed    { position: fixed; }
+.relative { position: relative; }
+.absolute { position: absolute; }
+.inset-0  { inset: 0; }
+.inset-x-0 { left: 0; right: 0; }
+.top-0    { top: 0; }
+.bottom-0 { bottom: 0; }
+.left-0   { left: 0; }
+.right-0  { right: 0; }
+.right-12 { right: 3rem; }
+.bottom-20 { bottom: 5rem; }
+.-bottom-6 { bottom: -1.5rem; }
+.-right-6  { right: -1.5rem; }
+
+/* Display */
+.flex         { display: flex; }
+.grid         { display: grid; }
+.block        { display: block; }
+.inline-block { display: inline-block; }
+.hidden       { display: none; }
+
+/* Flex */
+.flex-col      { flex-direction: column; }
+.flex-wrap     { flex-wrap: wrap; }
+.items-center  { align-items: center; }
+.items-end     { align-items: flex-end; }
+.items-start   { align-items: flex-start; }
+.justify-between { justify-content: space-between; }
+.justify-center  { justify-content: center; }
+.justify-end     { justify-content: flex-end; }
+.text-center { text-align: center; }
+
+/* Size */
+.w-full  { width: 100%; }
+.h-full  { height: 100%; }
+.h-screen { height: 100vh; }
+.min-h-screen { min-height: 100vh; }
+.w-8  { width:  2rem; }
+.h-8  { height: 2rem; }
+.w-px { width:  1px; }
+.h-14 { height: 3.5rem; }
+.object-cover { object-fit: cover; }
+.overflow-hidden   { overflow: hidden; }
+.overflow-x-hidden { overflow-x: hidden; }
+
+/* Z-index */
+.z-10 { z-index: 10; }
+.z-50 { z-index: 50; }
+
+/* Max-width / centering */
+.max-w-screen-xl { max-width: 1280px; }
+.max-w-3xl       { max-width: 48rem; }
+.mx-auto         { margin-left: auto; margin-right: auto; }
+
+/* Typography */
+.font-serif  { font-family: var(--font-cormorant), Georgia, serif; }
+.font-sans   { font-family: var(--font-dm-sans), system-ui, sans-serif; }
+.font-light  { font-weight: 300; }
+.font-medium { font-weight: 500; }
+.italic      { font-style: italic; }
+.uppercase   { text-transform: uppercase; }
+.no-underline { text-decoration: none; }
+.leading-none { line-height: 1; }
+.will-change-transform { will-change: transform; }
+.rounded-full { border-radius: 9999px; }
+.origin-center { transform-origin: center; }
+.bg-transparent { background-color: transparent; }
+.border-0   { border: 0; }
+
+/* Colors */
+.text-cream   { color: #f2e9df; }
+.text-caramel { color: #c8956c; }
+.text-mist    { color: #9e9089; }
+.bg-espresso  { background-color: #0f0805; }
+
+/* Gradient (scroll indicator) */
+.bg-gradient-to-b { background-image: linear-gradient(to bottom, var(--tw-gradient-stops, transparent, transparent)); }
+.from-caramel   { --tw-gradient-stops: #c8956c, transparent; }
+.to-transparent { }
+
+/* Transitions */
+.transition-all       { transition-property: all; transition-timing-function: cubic-bezier(.4,0,.2,1); transition-duration: 150ms; }
+.transition-transform { transition-property: transform; transition-timing-function: cubic-bezier(.4,0,.2,1); transition-duration: 150ms; }
+.transition-colors    { transition-property: color,background-color,border-color; transition-timing-function: cubic-bezier(.4,0,.2,1); transition-duration: 150ms; }
+.duration-300 { transition-duration: 300ms; }
+.duration-700 { transition-duration: 700ms; }
+
+/* Spacing — Padding */
+.py-6  { padding-top: 1.5rem;  padding-bottom: 1.5rem; }
+.py-24 { padding-top: 6rem;    padding-bottom: 6rem; }
+.py-32 { padding-top: 8rem;    padding-bottom: 8rem; }
+.py-36 { padding-top: 9rem;    padding-bottom: 9rem; }
+.py-40 { padding-top: 10rem;   padding-bottom: 10rem; }
+.py-44 { padding-top: 11rem;   padding-bottom: 11rem; }
+.px-5  { padding-left: 1.25rem; padding-right: 1.25rem; }
+.pb-16 { padding-bottom: 4rem; }
+.pb-20 { padding-bottom: 5rem; }
+.p-2   { padding: .5rem; }
+.p-6   { padding: 1.5rem; }
+.p-9   { padding: 2.25rem; }
+
+/* Spacing — Gap */
+.gap-3  { gap:  .75rem; }
+.gap-4  { gap:   1rem; }
+.gap-6  { gap:  1.5rem; }
+.gap-7  { gap: 1.75rem; }
+.gap-8  { gap:   2rem; }
+.gap-10 { gap:  2.5rem; }
+.gap-12 { gap:   3rem; }
+.gap-20 { gap:   5rem; }
+.gap-24 { gap:   6rem; }
+
+/* Spacing — Margin */
+.mb-0  { margin-bottom: 0; }
+.mb-3  { margin-bottom: .75rem; }
+.mb-4  { margin-bottom: 1rem; }
+.mb-5  { margin-bottom: 1.25rem; }
+.mb-6  { margin-bottom: 1.5rem; }
+.mb-7  { margin-bottom: 1.75rem; }
+.mb-8  { margin-bottom: 2rem; }
+.mb-11 { margin-bottom: 2.75rem; }
+.mb-12 { margin-bottom: 3rem; }
+.mb-14 { margin-bottom: 3.5rem; }
+.mb-16 { margin-bottom: 4rem; }
+.mb-20 { margin-bottom: 5rem; }
+.mt-1  { margin-top: .25rem; }
+.mt-4  { margin-top: 1rem; }
+.mt-6  { margin-top: 1.5rem; }
+.mt-8  { margin-top: 2rem; }
+.mt-10 { margin-top: 2.5rem; }
+.mt-14 { margin-top: 3.5rem; }
+.mt-16 { margin-top: 4rem; }
+.mt-20 { margin-top: 5rem; }
+.ml-4  { margin-left: 1rem; }
+
+/* Hover / Group interactions */
+.hover\:scale-\[1\.04\]:hover              { transform: scale(1.04); }
+.group:hover .group-hover\:scale-\[1\.07\] { transform: scale(1.07); }
+.group:hover .group-hover\:scale-\[1\.06\] { transform: scale(1.06); }
+
+/* Responsive (md = 768px) */
+@media (min-width: 768px) {
+  .md\:flex         { display: flex; }
+  .md\:block        { display: block; }
+  .md\:inline-block { display: inline-block; }
+  .md\:hidden       { display: none; }
+  .md\:px-12  { padding-left: 3rem; padding-right: 3rem; }
+  .md\:pb-20  { padding-bottom: 5rem; }
+  .md\:gap-20 { gap: 5rem; }
+  .md\:gap-24 { gap: 6rem; }
+  .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .md\:-bottom-6   { bottom: -1.5rem; }
+  .md\:-right-6    { right:  -1.5rem; }
 }
