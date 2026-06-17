@@ -1,6 +1,7 @@
 'use client'
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import Image from 'next/image'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -11,12 +12,30 @@ export default function Hero() {
 
   return (
     <section ref={ref} id="hero" className="relative h-screen overflow-hidden">
-      {/* Video bg with parallax */}
+      {/* Background — static image on mobile, video on desktop */}
       <motion.div style={{ y }} className="absolute inset-0 scale-[1.15] will-change-transform">
-        <video autoPlay loop muted playsInline className="w-full h-full object-cover" poster="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=1920&q=60">
+        {/* Mobile: optimized static image */}
+        <div className="block md:hidden" style={{ position: 'absolute', inset: 0 }}>
+          <Image
+            src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1080&q=85"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+            aria-hidden="true"
+          />
+        </div>
+        {/* Desktop: cinematic video loop */}
+        <video
+          autoPlay loop muted playsInline
+          preload="none"
+          className="w-full h-full object-cover hidden md:block"
+        >
           <source
             src="https://d8j0ntlcm91z4.cloudfront.net/user_3ExDMAbMgv1zj4nHDN284Sb3ram/hf_20260615_190750_0bdfaa76-4356-49d3-8b4f-18bc5b5a6200.mp4"
             type="video/mp4"
+            media="(min-width: 768px)"
           />
         </video>
       </motion.div>
