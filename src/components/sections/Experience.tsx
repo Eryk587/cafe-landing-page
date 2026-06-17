@@ -67,8 +67,8 @@ export default function Experience() {
               key={t}
               className="font-sans"
               style={{
-                border: '1px solid rgba(200,149,108,.3)',
-                color: 'rgba(200,149,108,.75)',
+                border: '1px solid rgba(200,149,108,.35)',
+                color: '#c8956c',
                 padding: '.6rem 1.4rem',
                 fontSize: '.62rem',
                 letterSpacing: '.28em',

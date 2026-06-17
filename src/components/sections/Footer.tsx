@@ -36,20 +36,18 @@ export default function Footer() {
         <div className="hr-line" />
 
         <div className="flex justify-between items-center flex-wrap gap-4 mt-6">
-          <p className="font-sans" style={{ fontSize: '.7rem', color: 'rgba(158,144,137,.35)' }}>
-            © 2025 Café. Wszelkie prawa zastrzeżone.
+          <p className="font-sans" style={{ fontSize: '.7rem', color: '#9e9089' }}>
+            © 2026 Café. Wszelkie prawa zastrzeżone.
           </p>
           <div className="flex items-center gap-8">
             <Link
               href="/polityka-prywatnosci"
               className="nav-link"
-              style={{ fontSize: '.6rem', opacity: .4, transition: 'opacity .25s' }}
-              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.opacity = '.75')}
-              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.opacity = '.4')}
+              style={{ fontSize: '.6rem', transition: 'color .25s' }}
             >
               Polityka prywatności
             </Link>
-            <p className="font-sans" style={{ fontSize: '.7rem', color: 'rgba(158,144,137,.35)' }}>
+            <p className="font-sans" style={{ fontSize: '.7rem', color: '#9e9089' }}>
               Stworzone z pasją do kawy.
             </p>
           </div>

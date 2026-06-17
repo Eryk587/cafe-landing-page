@@ -26,6 +26,7 @@ export default function Location() {
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2561.4914986707576!2d19.936657!3d50.062615!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47165b4f4a65d97f%3A0x5d0c4b0e4b0e4b0e!2sFlorianity%2023%2C%2031-021%20Krak%C3%B3w!5e0!3m2!1spl!2spl!4v1718000000000!5m2!1spl!2spl"
             width="100%" height="100%"
+            title="Mapa dojazdu — Café Kraków, ul. Floriańska 23"
             style={{ border: 0, display: 'block', filter: 'grayscale(100%) invert(1) contrast(0.85) brightness(0.55) sepia(0.25)' }}
             allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"
           />
