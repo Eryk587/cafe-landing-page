@@ -1,5 +1,6 @@
 'use client'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -38,6 +39,7 @@ export default function Gallery() {
             style={{
               aspectRatio: p.tall ? undefined : '1',
               gridRow: p.tall ? 'span 2' : undefined,
+              position: 'relative',
             }}
             initial={{ opacity: 0, scale: 0.92, y: i % 2 === 0 ? 50 : 30 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -45,11 +47,12 @@ export default function Gallery() {
             viewport={{ once: true, margin: '-60px' }}
             whileHover={{ scale: 1.01 }}
           >
-            <img
+            <Image
               src={p.src}
               alt={p.alt}
-              className="w-full h-full object-cover block transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.06]"
-              style={{ height: p.tall ? '100%' : undefined }}
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.06]"
             />
           </motion.div>
         ))}

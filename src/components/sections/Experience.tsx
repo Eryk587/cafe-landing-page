@@ -1,6 +1,7 @@
 'use client'
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import Image from 'next/image'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -15,10 +16,13 @@ export default function Experience() {
     <section ref={ref} className="relative py-44 px-5 md:px-12 text-center overflow-hidden">
       {/* Background image with parallax */}
       <motion.div className="absolute inset-0 will-change-transform" style={{ scale: 1.22, y: bgY }}>
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1920&q=80"
           alt=""
-          className="w-full h-full object-cover"
+          fill
+          sizes="100vw"
+          className="object-cover"
+          aria-hidden="true"
         />
       </motion.div>
       <div className="absolute inset-0" style={{ background: 'rgba(15,8,5,.78)' }} />

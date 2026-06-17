@@ -1,6 +1,7 @@
 'use client'
 import { useRef, useEffect, useState } from 'react'
 import { motion, useInView, animate } from 'framer-motion'
+import Image from 'next/image'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -36,11 +37,13 @@ export default function Story() {
 
         {/* Image col */}
         <motion.div {...reveal()} className="relative">
-          <div className="overflow-hidden" style={{ aspectRatio: '4/5' }}>
-            <img
+          <div className="overflow-hidden" style={{ aspectRatio: '4/5', position: 'relative' }}>
+            <Image
               src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800&q=80"
-              alt="Barista"
-              className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] hover:scale-[1.04]"
+              alt="Barista przygotowujący kawę"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] hover:scale-[1.04]"
             />
           </div>
 

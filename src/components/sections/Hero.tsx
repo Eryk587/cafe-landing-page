@@ -13,7 +13,7 @@ export default function Hero() {
     <section ref={ref} id="hero" className="relative h-screen overflow-hidden">
       {/* Video bg with parallax */}
       <motion.div style={{ y }} className="absolute inset-0 scale-[1.15] will-change-transform">
-        <video autoPlay loop muted playsInline className="w-full h-full object-cover">
+        <video autoPlay loop muted playsInline className="w-full h-full object-cover" poster="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=1920&q=60">
           <source
             src="https://d8j0ntlcm91z4.cloudfront.net/user_3ExDMAbMgv1zj4nHDN284Sb3ram/hf_20260615_190750_0bdfaa76-4356-49d3-8b4f-18bc5b5a6200.mp4"
             type="video/mp4"
